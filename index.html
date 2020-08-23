@@ -160,23 +160,23 @@
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="F1_mpg" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F1_cost" disabled></div>
+				<div class="col"><input type="number" id="F1_mpg" min="0" step=".01" placeholder="gallons"></div>
+				<div class="col"><input type="text" id="F1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="F2_mpg" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F2_cost" disabled></div>
+				<div class="col"><input type="number" id="F2_mpg"  min="0" step=".01"placeholder="gallons"></div>
+				<div class="col"><input type="text" id="F2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="F3_mpg" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F3_cost" disabled></div>
+				<div class="col"><input type="number" id="F3_mpg" min="0" step=".01" placeholder="gallons"></div>
+				<div class="col"><input type="text" id="F3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="F4_mpg" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F4_cost" disabled></div>
+				<div class="col"><input type="number" id="F4_mpg" min="0" step=".01" placeholder="gallons"></div>
+				<div class="col"><input type="text" id="F4_cost" disabled placeholder="$0.00"></div>
 			</div>
 		</div>
 
@@ -190,27 +190,27 @@
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="E1_kwh" placeholder="kWh"></div>
-				<div class="col"><input type="text" id="E1_range" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E1_cost" disabled></div>
+				<div class="col"><input type="number" id="E1_kwh" min="0" step=".01" placeholder="kWh"></div>
+				<div class="col"><input type="number" id="E1_range" min="0" step=".01" placeholder="miles"></div>
+				<div class="col"><input type="text" id="E1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="E2_kwh" placeholder="kWh"></div>
-				<div class="col"><input type="text" id="E2_range" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E2_cost" disabled></div>
+				<div class="col"><input type="number" id="E2_kwh" min="0" step=".01" placeholder="kWh"></div>
+				<div class="col"><input type="number" id="E2_range" min="0" step=".01" placeholder="miles"></div>
+				<div class="col"><input type="text" id="E2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="E3_kwh" placeholder="kWh"></div>
-				<div class="col"><input type="text" id="E3_range" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E3_cost" disabled></div>
+				<div class="col"><input type="number" id="E3_kwh" min="0" step=".01" placeholder="kWh"></div>
+				<div class="col"><input type="number" id="E3_range" min="0" step=".01" placeholder="miles"></div>
+				<div class="col"><input type="text" id="E3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
 				<div class="col"><input type="text"></div>
-				<div class="col"><input type="text" id="E4_kwh" placeholder="kWh"></div>
-				<div class="col"><input type="text" id="E4_range" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E4_cost" disabled></div>
+				<div class="col"><input type="number" id="E4_kwh" min="0" step=".01" placeholder="kWh"></div>
+				<div class="col"><input type="number" id="E4_range" min="0" step=".01" placeholder="miles"></div>
+				<div class="col"><input type="text" id="E4_cost" disabled placeholder="$0.00"></div>
 			</div>
 		</div>
 	</div>
@@ -246,10 +246,10 @@
 					var weekly_gallons = weekly_miles / mpg;
 					var weekly_cost = weekly_gallons * gas_price;
 					var yearly_cost = weekly_cost * 52;
-					document.getElementById("F"+i+"_cost").value = (yearly_cost).toFixed(2);
+					document.getElementById("F"+i+"_cost").value = "$"+(yearly_cost).toFixed(2);
 				}
 				else {
-					document.getElementById("F"+i+"_cost").value = 0;
+					document.getElementById("F"+i+"_cost").value = "$0.00";
 				}
 			},
 			mpge: function(i) {
@@ -264,10 +264,10 @@
 					var weekly_kwh = weekly_miles / miles_per_kwh;
 					var weekly_cost = weekly_kwh * elec_price;
 					var yearly_cost = weekly_cost * 52;
-					document.getElementById("E"+i+"_cost").value = (yearly_cost).toFixed(2);
+					document.getElementById("E"+i+"_cost").value = "$"+(yearly_cost).toFixed(2);
 				}
 				else {
-					document.getElementById("E"+i+"_cost").value = 0;
+					document.getElementById("E"+i+"_cost").value = "$0.00";
 				}
 			},
 		};
