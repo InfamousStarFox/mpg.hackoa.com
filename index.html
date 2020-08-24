@@ -241,32 +241,32 @@
 
 			// Watch for changes
 			function watchChanges() {
-				$("input#gas").on('keyup', function () {
+				document.getElementById("gas").addEventListener("keyup", function () {
 					cost.gas_price();
 				});
-				$("input#elec").on('keyup', function () {
+				document.getElementById("elec").addEventListener("keyup", function () {
 					cost.elec_price();
 				});
 				["mi_weekly", "mi_yearly", "km_weekly", "km_yearly"]
 					.forEach(i => {
-						$("input#" + i).on('keyup', function () {
+						document.getElementById(i).addEventListener("keyup", function () {
 							cost.distance(i);
 						});
 					});
 				for (let i = 1; i <= 4; i++) {
-					$("input#F" + i + "_name").on('keyup', function () {
+					document.getElementById("F"+i+"_name").addEventListener("keyup", function () {
 						cost.name('F', i);
 					});
-					$("input#F" + i + "_mpg").on('keyup', function () {
+					document.getElementById("F"+i+"_mpg").addEventListener("keyup", function () {
 						cost.mpg(i);
 					});
-					$("input#E" + i + "_name").on('keyup', function () {
+					document.getElementById("E"+i+"_name").addEventListener("keyup", function () {
 						cost.name('E', i);
 					});
-					$("input#E" + i + "_kwh").on('keyup', function () {
+					document.getElementById("E"+i+"_kwh").addEventListener("keyup", function () {
 						cost.kwh(i);
 					});
-					$("input#E" + i + "_range").on('keyup', function () {
+					document.getElementById("E"+i+"_range").addEventListener("keyup", function () {
 						cost.range(i);
 					});
 				}
