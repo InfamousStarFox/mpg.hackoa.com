@@ -7,7 +7,7 @@
 
 <body>
 	<div class="container">
-
+		Loaded
 		<h1>Annual Fuel Cost Calculator</h1>
 		<div class="form-group">
 			<h3>Distance</h3>
@@ -184,6 +184,7 @@
 			},
 			distance: function (unit) {
 				var new_miles = 0;
+				alert(unit);
 				if (unit == "mi_weekly") new_miles = document.getElementById("mi_weekly").value * 52;
 				if (unit == "mi_yearly") new_miles = document.getElementById("mi_yearly").value;
 				if (unit == "km_weekly") new_miles = convert.km_to_miles(document.getElementById("km_weekly").value) * 52;
