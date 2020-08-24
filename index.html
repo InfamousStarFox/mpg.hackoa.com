@@ -17,21 +17,21 @@
 			<div class="form-row">
 				<div class="form-col">
 					<label>Weekly Miles</label>
-					<input type="number" id="mi_weekly" name="mi_weekly" min="0" step=".01" placeholder="Miles" onkeyup="cost.distance('mi_weekly')">
+					<input type="number" id="mi_weekly" name="mi_weekly" min="0" step=".01" placeholder="Miles" onkeypress="cost.distance('mi_weekly')">
 				</div>
 				<div class="form-col">
 					<label>Annual Miles</label>
-					<input type="number" id="mi_yearly" name="km_yearly" min="0" step=".01" placeholder="Miles" onkeyup="cost.distance('mi_yearly')">
+					<input type="number" id="mi_yearly" name="km_yearly" min="0" step=".01" placeholder="Miles" onkeypress="cost.distance('mi_yearly')">
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="form-col">
 					<label>Weekly Kilometers</label>
-					<input type="number" id="km_weekly" name="km_weekly" min="0" step=".01" placeholder="KM" onkeyup="cost.distance('km_weekly')">
+					<input type="number" id="km_weekly" name="km_weekly" min="0" step=".01" placeholder="KM" onkeypress="cost.distance('km_weekly')">
 				</div>
 				<div class="form-col">
 					<label>Annual Kilometers</label>
-					<input type="number" id="km_yearly" name="km_yearly" min="0" step=".01" placeholder="KM" onkeyup="cost.distance('km_yearly')">
+					<input type="number" id="km_yearly" name="km_yearly" min="0" step=".01" placeholder="KM" onkeypress="cost.distance('km_yearly')">
 				</div>
 			</div>
 		</div>
@@ -41,11 +41,11 @@
 			<div class="form-row">
 				<div class="form-col">
 					<label>Gasoline</label>
-					<input type="number" id="gas" name="gas" min="0" max="1000" step=".001" placeholder="$ per gallon" onkeyup="cost.gas_price()">
+					<input type="number" id="gas" name="gas" min="0" max="1000" step=".001" placeholder="$ per gallon" onkeypress="cost.gas_price()">
 				</div>
 				<div class="form-col">
 					<label>Electricity</label>
-					<input type="number" id="elec" name="elec" min="0" max="1000" step=".001" placeholder="&cent; per kWh" onkeyup="cost.elec_price()">
+					<input type="number" id="elec" name="elec" min="0" max="1000" step=".001" placeholder="&cent; per kWh" onkeypress="cost.elec_price()">
 				</div>
 			</div>
 		</div>
@@ -59,23 +59,23 @@
 				<div class="col">Yearly Cost</div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="F1_name" placeholder="Year Make Model" onkeyup="cost.name('F','1')"></div>
-				<div class="col"><input type="number" id="F1_mpg" min="0" step=".01" placeholder="gallons" onkeyup="cost.mpg('1')"></div>
+				<div class="col"><input type="text" id="F1_name" placeholder="Year Make Model" onkeypress="cost.name('F','1')"></div>
+				<div class="col"><input type="number" id="F1_mpg" min="0" step=".01" placeholder="gallons" onkeypress="cost.mpg('1')"></div>
 				<div class="col"><input type="text" id="F1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text " id="F2_name" placeholder="Year Make Model" onkeyup="cost.name('F','2')"></div>
-				<div class="col"><input type="number" id="F2_mpg" min="0" step=".01" placeholder="gallons" onkeyup="cost.mpg('2')"></div>
+				<div class="col"><input type="text " id="F2_name" placeholder="Year Make Model" onkeypress="cost.name('F','2')"></div>
+				<div class="col"><input type="number" id="F2_mpg" min="0" step=".01" placeholder="gallons" onkeypress="cost.mpg('2')"></div>
 				<div class="col"><input type="text" id="F2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="F3_name" placeholder="Year Make Model" onkeyup="cost.name('F','3')"></div>
-				<div class="col"><input type="number" id="F3_mpg" min="0" step=".01" placeholder="gallons" onkeyup="cost.mpg('3')"></div>
+				<div class="col"><input type="text" id="F3_name" placeholder="Year Make Model" onkeypress="cost.name('F','3')"></div>
+				<div class="col"><input type="number" id="F3_mpg" min="0" step=".01" placeholder="gallons" onkeypress="cost.mpg('3')"></div>
 				<div class="col"><input type="text" id="F3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="F4_name" placeholder="Year Make Model" onkeyup="cost.name('F','4')"></div>
-				<div class="col"><input type="number" id="F4_mpg" min="0" step=".01" placeholder="gallons" onkeyup="cost.mpg('4')"></div>
+				<div class="col"><input type="text" id="F4_name" placeholder="Year Make Model" onkeypress="cost.name('F','4')"></div>
+				<div class="col"><input type="number" id="F4_mpg" min="0" step=".01" placeholder="gallons" onkeypress="cost.mpg('4')"></div>
 				<div class="col"><input type="text" id="F4_cost" disabled placeholder="$0.00"></div>
 			</div>
 		</div>
@@ -89,27 +89,27 @@
 				<div class="col">Yearly Cost</div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="E1_name" placeholder="Year Make Model" onkeyup="cost.name('E','1')"></div>
-				<div class="col"><input type="number" id="E1_kwh" min="0" step=".01" placeholder="kWh" onkeyup="cost.kwh('1')"></div>
-				<div class="col"><input type="number" id="E1_range" min="0" step=".01" placeholder="miles" onkeyup="cost.range('1')"></div>
+				<div class="col"><input type="text" id="E1_name" placeholder="Year Make Model" onkeypress="cost.name('E','1')"></div>
+				<div class="col"><input type="number" id="E1_kwh" min="0" step=".01" placeholder="kWh" onkeypress="cost.kwh('1')"></div>
+				<div class="col"><input type="number" id="E1_range" min="0" step=".01" placeholder="miles" onkeypress="cost.range('1')"></div>
 				<div class="col"><input type="text" id="E1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="E2_name" placeholder="Year Make Model" onkeyup="cost.name('E','2')"></div>
-				<div class="col"><input type="number" id="E2_kwh" min="0" step=".01" placeholder="kWh" onkeyup="cost.kwh('2')"></div>
-				<div class="col"><input type="number" id="E2_range" min="0" step=".01" placeholder="miles" onkeyup="cost.range('2')"></div>
+				<div class="col"><input type="text" id="E2_name" placeholder="Year Make Model" onkeypress="cost.name('E','2')"></div>
+				<div class="col"><input type="number" id="E2_kwh" min="0" step=".01" placeholder="kWh" onkeypress="cost.kwh('2')"></div>
+				<div class="col"><input type="number" id="E2_range" min="0" step=".01" placeholder="miles" onkeypress="cost.range('2')"></div>
 				<div class="col"><input type="text" id="E2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="E3_name" placeholder="Year Make Model" onkeyup="cost.name('E','3')"></div>
-				<div class="col"><input type="number" id="E3_kwh" min="0" step=".01" placeholder="kWh" onkeyup="cost.kwh('3')"></div>
-				<div class="col"><input type="number" id="E3_range" min="0" step=".01" placeholder="miles" onkeyup="cost.range('3')"></div>
+				<div class="col"><input type="text" id="E3_name" placeholder="Year Make Model" onkeypress="cost.name('E','3')"></div>
+				<div class="col"><input type="number" id="E3_kwh" min="0" step=".01" placeholder="kWh" onkeypress="cost.kwh('3')"></div>
+				<div class="col"><input type="number" id="E3_range" min="0" step=".01" placeholder="miles" onkeypress="cost.range('3')"></div>
 				<div class="col"><input type="text" id="E3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text" id="E4_name" placeholder="Year Make Model" onkeyup="cost.name('E','4')"></div>
-				<div class="col"><input type="number" id="E4_kwh" min="0" step=".01" placeholder="kWh" onkeyup="cost.kwh('4')"></div>
-				<div class="col"><input type="number" id="E4_range" min="0" step=".01" placeholder="miles" onkeyup="cost.range('4')"></div>
+				<div class="col"><input type="text" id="E4_name" placeholder="Year Make Model" onkeypress="cost.name('E','4')"></div>
+				<div class="col"><input type="number" id="E4_kwh" min="0" step=".01" placeholder="kWh" onkeypress="cost.kwh('4')"></div>
+				<div class="col"><input type="number" id="E4_range" min="0" step=".01" placeholder="miles" onkeypress="cost.range('4')"></div>
 				<div class="col"><input type="text" id="E4_cost" disabled placeholder="$0.00"></div>
 			</div>
 		</div>
