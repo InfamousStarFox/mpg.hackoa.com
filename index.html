@@ -3,135 +3,35 @@
 <title>MPG Calculator</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-	body {
-		font-family: sans-serif;
-		background-color: #f3f6fa;
-	}
-
-	.container {
-		max-width: 1140px;
-		margin: 0px auto;
-		background-color: white;
-		padding: 10px 40px;
-		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-		border: 1px solid rgba(0,0,0,.125);
-	}
-	@media (max-width: 576px) {
-		body {
-			margin: 0px;
-		}
-		.container {
-			padding: 5px 20px;
-		}
-	}
-
-	.form-group {
-		margin-bottom: 1rem;
-		margin: 0px auto;
-	}
-
-	.form-row {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.row {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.col {
-		flex-basis: 0;
-		flex-grow: 1;
-		max-width: 100%;
-	}
-
-	.form-col {
-		margin: 5px;
-	}
-
-	label {
-		display: inline-block;
-		margin-bottom: .5rem;
-	}
-
-	input {
-		padding: .375rem .75rem;
-		width: calc(100% - 24px);
-		max-width: 100%;
-	}
-
-	input:focus,
-	.table .row .col input:focus {
-		border: 1px solid purple;
-		outline: none;
-	}
-
-	input,
-	.table .row .col {
-		color: #495057;
-		border: 1px solid #ced4da;
-		border-radius: .25rem;
-		display: block;
-	}
-
-	.table .row .col {
-		margin: 5px;
-	}
-
-	.table .row .col input {
-		border: 0px;
-	}
-
-	.table .row:first-child .col {
-		border: 0px;
-	}
-
-	.table .row .col {
-		max-width: 100px;
-	}
-
-	.table .row .col:first-child {
-		max-width: 300px;
-	}
-
-	.table .row .col:last-child {
-		max-width: 100px;
-	}
-
-	@media (max-width: 576px) {
-		.table .row .col {
-			max-width: 75px;
-		}
-
-		.table .row .col:first-child {
-			max-width: 150px;
-		}
-
-		.table .row .col:last-child {
-			max-width: 75px;
-		}
-	}
-</style>
+<link rel="stylesheet" href="style.css">
 
 <body>
 	<div class="container">
-		
+
 		<div class="form-group">
-			<h1>Yearly Fuel Cost Calculator</h1>
+			<h1>Annual Fuel Cost Calculator</h1>
 		</div>
 
 		<div class="form-group">
-			<h3>Weekly Distance</h3>
+			<h3>Distance</h3>
 			<div class="form-row">
 				<div class="form-col">
-					<label>Miles</label>
-					<input type="number" id="mi" name="mi" min="0" step=".01" placeholder="Miles">
+					<label>Weekly Miles</label>
+					<input type="number" id="mi_weekly" name="mi_weekly" min="0" step=".01" placeholder="Miles">
 				</div>
 				<div class="form-col">
-					<label>Kilometers</label>
-					<input type="number" id="km" name="km" min="0" step=".01" placeholder="KM">
+					<label>Annual Miles</label>
+					<input type="number" id="mi_yearly" name="km_yearly" min="0" step=".01" placeholder="Miles">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-col">
+					<label>Weekly Kilometers</label>
+					<input type="number" id="km_weekly" name="km_weekly" min="0" step=".01" placeholder="KM">
+				</div>
+				<div class="form-col">
+					<label>Annual Kilometers</label>
+					<input type="number" id="km_yearly" name="km_yearly" min="0" step=".01" placeholder="KM">
 				</div>
 			</div>
 		</div>
@@ -145,7 +45,8 @@
 				</div>
 				<div class="form-col">
 					<label>Electricity</label>
-					<input type="number" id="elec" name="elec" min="0" max="1000" step=".001" placeholder="&cent; per kWh">
+					<input type="number" id="elec" name="elec" min="0" max="1000" step=".001"
+						placeholder="&cent; per kWh">
 				</div>
 			</div>
 		</div>
@@ -159,22 +60,22 @@
 				<div class="col">Yearly Cost</div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="F1_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="F1_mpg" min="0" step=".01" placeholder="gallons"></div>
 				<div class="col"><input type="text" id="F1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
-				<div class="col"><input type="number" id="F2_mpg"  min="0" step=".01"placeholder="gallons"></div>
+				<div class="col"><input type="text " id="F2_name" placeholder="Year Make Model"></div>
+				<div class="col"><input type="number" id="F2_mpg" min="0" step=".01" placeholder="gallons"></div>
 				<div class="col"><input type="text" id="F2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="F3_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="F3_mpg" min="0" step=".01" placeholder="gallons"></div>
 				<div class="col"><input type="text" id="F3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="F4_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="F4_mpg" min="0" step=".01" placeholder="gallons"></div>
 				<div class="col"><input type="text" id="F4_cost" disabled placeholder="$0.00"></div>
 			</div>
@@ -189,25 +90,25 @@
 				<div class="col">Yearly Cost</div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="E1_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="E1_kwh" min="0" step=".01" placeholder="kWh"></div>
 				<div class="col"><input type="number" id="E1_range" min="0" step=".01" placeholder="miles"></div>
 				<div class="col"><input type="text" id="E1_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="E2_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="E2_kwh" min="0" step=".01" placeholder="kWh"></div>
 				<div class="col"><input type="number" id="E2_range" min="0" step=".01" placeholder="miles"></div>
 				<div class="col"><input type="text" id="E2_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="E3_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="E3_kwh" min="0" step=".01" placeholder="kWh"></div>
 				<div class="col"><input type="number" id="E3_range" min="0" step=".01" placeholder="miles"></div>
 				<div class="col"><input type="text" id="E3_cost" disabled placeholder="$0.00"></div>
 			</div>
 			<div class="row">
-				<div class="col"><input type="text"></div>
+				<div class="col"><input type="text" id="E4_name" placeholder="Year Make Model"></div>
 				<div class="col"><input type="number" id="E4_kwh" min="0" step=".01" placeholder="kWh"></div>
 				<div class="col"><input type="number" id="E4_range" min="0" step=".01" placeholder="miles"></div>
 				<div class="col"><input type="text" id="E4_cost" disabled placeholder="$0.00"></div>
@@ -215,12 +116,13 @@
 		</div>
 	</div>
 
+	<script src="js/cookie.js"></script>
 	<script type="text/javascript">
 
 		// Global Variables
-		var gas_price = 0;
-		var elec_price = 0;
-		var weekly_miles = 0;
+		var gas_price = cookie.get("gas_price") ? cookie.get("gas_price") : 0;
+		var elec_price = cookie.get("elec_price") ? cookie.get("elec_price") : 0;
+		var yearly_miles = cookie.get("yearly_miles") ? cookie.get("yearly_miles") : 0;
 
 		// Convert units
 		var convert = {
@@ -234,102 +136,143 @@
 
 		// Calculate Yearly Costs
 		var cost = {
-			calculate: function() {
-				for(let i=1; i<=4; i++){
+			calculate: function () {
+				for (let i = 1; i <= 4; i++) {
 					cost.mpg(i);
 					cost.mpge(i);
 				}
 			},
-			mpg: function(i) {
-				var mpg = document.getElementById("F"+i+"_mpg").value;
-				if(Number(mpg) > 0){
-					var weekly_gallons = weekly_miles / mpg;
-					var weekly_cost = weekly_gallons * gas_price;
-					var yearly_cost = weekly_cost * 52;
-					document.getElementById("F"+i+"_cost").value = "$"+(yearly_cost).toFixed(2);
+			mpg: function (i) {
+				var mpg = document.getElementById("F" + i + "_mpg").value;
+				if (Number(mpg) > 0) {
+					var yearly_cost = gas_price * yearly_miles / mpg;
+					document.getElementById("F" + i + "_cost").value = "$" + (yearly_cost).toFixed(2);
 				}
 				else {
-					document.getElementById("F"+i+"_cost").value = "$0.00";
+					document.getElementById("F" + i + "_cost").value = "$0.00";
 				}
 			},
-			mpge: function(i) {
-				var kwh = document.getElementById("E"+i+"_kwh").value;
-				var range = document.getElementById("E"+i+"_range").value;
+			mpge: function (i) {
+				var kwh = document.getElementById("E" + i + "_kwh").value;
+				var range = document.getElementById("E" + i + "_range").value;
 
-				console.log("kwh: "+kwh);
-				console.log("range: "+range);
-
-				if(Number(kwh) > 0 && Number(range) > 0) {
-					var miles_per_kwh = range / kwh;
-					var weekly_kwh = weekly_miles / miles_per_kwh;
-					var weekly_cost = weekly_kwh * elec_price;
-					var yearly_cost = weekly_cost * 52;
-					document.getElementById("E"+i+"_cost").value = "$"+(yearly_cost).toFixed(2);
+				if (Number(kwh) > 0 && Number(range) > 0) {
+					var yearly_cost = elec_price * .01 * yearly_miles / (range / kwh);
+					document.getElementById("E" + i + "_cost").value = "$" + (yearly_cost).toFixed(2);
 				}
 				else {
-					document.getElementById("E"+i+"_cost").value = "$0.00";
+					document.getElementById("E" + i + "_cost").value = "$0.00";
 				}
 			},
 		};
 
 		// Watch for variable changes
 		var watch = {
-			init: function() {
-				for(let i=1; i<=4; i++){
+			init: function () {
+				for (let i = 1; i <= 4; i++) {
+					watch.name(i);
 					watch.mpg(i);
 					watch.mpge(i);
 				}
-				watch.miles();
-				watch.kilometers();
+				watch.distance();
 				watch.gas();
 				watch.elec();
 			},
-			mpg: function(i) {
-				document.getElementById("F"+i+"_mpg").addEventListener("keyup", function () {
+			name: function (i) {
+				document.getElementById("F" + i + "_name").addEventListener("keyup", function () {
+					cookie.set("F" + i + "_name", this.value);
+				});
+				document.getElementById("E" + i + "_name").addEventListener("keyup", function () {
+					cookie.set("E" + i + "_name", this.value);
+				});
+			},
+			mpg: function (i) {
+				document.getElementById("F" + i + "_mpg").addEventListener("keyup", function () {
 					cost.mpg(i);
+					cookie.set("F" + i + "_mpg", this.value);
 				});
 			},
-			mpge: function(i) {
-				document.getElementById("E"+i+"_kwh").addEventListener("keyup", function () {
+			mpge: function (i) {
+				document.getElementById("E" + i + "_kwh").addEventListener("keyup", function () {
 					cost.mpge(i);
+					cookie.set("E" + i + "_kwh", this.value);
 				});
-				document.getElementById("E"+i+"_range").addEventListener("keyup", function () {
+				document.getElementById("E" + i + "_range").addEventListener("keyup", function () {
 					cost.mpge(i);
+					cookie.set("E" + i + "_range", this.value);
 				});
 			},
-			miles: function() {
-				document.getElementById("mi").addEventListener("keyup", function () {
-					weekly_miles = this.value;
-					document.getElementById("km").value = convert.miles_to_km(this.value);
+			distance: function () {
+				function setDistance(yearly_miles=0) {
+					// Set the fields
+					document.getElementById("mi_weekly").value = parseFloat((Number)(yearly_miles / 52).toFixed(2));
+					document.getElementById("mi_yearly").value = parseFloat((Number)(yearly_miles).toFixed(2));
+					document.getElementById("km_weekly").value = parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2));
+					document.getElementById("km_yearly").value = parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2));
+					
+					// Set the cookies
+					cookie.set("weekly_miles", document.getElementById("mi_weekly").value);
+					cookie.set("yearly_miles", document.getElementById("mi_yearly").value);
+					cookie.set("weekly_km", document.getElementById("km_weekly").value);
+					cookie.set("yearly_km", document.getElementById("km_yearly").value);
+
 					cost.calculate();
+				}
+				document.getElementById("mi_weekly").addEventListener("keyup", function(){
+					setDistance(this.value * 52);
+				});
+				document.getElementById("mi_yearly").addEventListener("keyup", function(){
+					setDistance(this.value);
+				});
+				document.getElementById("km_weekly").addEventListener("keyup", function(){
+					setDistance(convert.km_to_miles(this.value) / 52);
+				});
+				document.getElementById("km_yearly").addEventListener("keyup", function(){
+					setDistance(convert.km_to_miles(this.value));
 				});
 			},
-			kilometers: function() {
-				document.getElementById("km").addEventListener("keyup", function () {
-					weekly_miles = convert.km_to_miles(this.value);
-					document.getElementById("mi").value = weekly_miles;
-					cost.calculate();
-				});
-			},
-			gas: function() {
+			gas: function () {
 				document.getElementById("gas").addEventListener("keyup", function () {
 					gas_price = this.value;
 					cost.calculate();
+					cookie.set("gas_price", this.value);
 				});
 			},
-			elec: function() {
+			elec: function () {
 				document.getElementById("elec").addEventListener("keyup", function () {
-					elec_price = this.value *.01;
+					elec_price = this.value;
 					cost.calculate();
+					cookie.set("elec_price", this.value);
 				});
 			}
 		};
 
-		// Initalize the watchers
-		watch.init();
+		// Initialize the form
+		function init(){
 
+			// Load Cookie Data into the form
+			for (let i = 1; i <= 4; i++) {
+				document.getElementById("F" + i + "_name").value = cookie.get("F" + i + "_name");
+				document.getElementById("F" + i + "_mpg").value = cookie.get("F" + i + "_mpg");
+				document.getElementById("E" + i + "_name").value = cookie.get("E" + i + "_name");
+				document.getElementById("E" + i + "_kwh").value = cookie.get("E" + i + "_kwh");
+				document.getElementById("E" + i + "_range").value = cookie.get("E" + i + "_range");
+			}
+			document.getElementById("mi_weekly").value = cookie.get("weekly_miles");
+			document.getElementById("km_weekly").value = cookie.get("weekly_km");
+			document.getElementById("mi_yearly").value = cookie.get("yearly_miles");
+			document.getElementById("km_yearly").value = cookie.get("yearly_km");
+			document.getElementById("gas").value = cookie.get("gas_price");
+			document.getElementById("elec").value = cookie.get("elec_price");
+
+			// Initalize the watchers
+			watch.init();
+
+			// Calculate the yearly costs
+			cost.calculate();
+		}
+		init();
 	</script>
 
 </body>
-
 </html>

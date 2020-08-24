@@ -1,0 +1,116 @@
+body {
+    font-family: sans-serif;
+    background-color: #f3f6fa;
+}
+h1 {
+    border-top: 5px solid black;
+    border-bottom: 5px solid black;
+    padding: 5px;
+}
+h1,h2,h3,h4 {
+    text-align: center;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0px auto;
+    background-color: white;
+    padding: 10px 40px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    border: 1px solid rgba(0, 0, 0, .125);
+}
+
+@media (max-width: 576px) {
+    body {
+        margin: 0px;
+    }
+
+    .container {
+        padding: 5px 20px;
+    }
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    margin: 0px auto;
+}
+
+.row, .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-items: center;
+    justify-content: center;
+}
+
+.col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.form-col {
+    margin: 5px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+}
+
+input {
+    padding: .375rem .75rem;
+    width: calc(100% - 24px);
+    max-width: 100%;
+}
+
+input:focus,
+.table .row .col input:focus {
+    border: 1px solid purple;
+    outline: none;
+}
+
+input,
+.table .row .col {
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    display: block;
+}
+
+.table .row .col {
+    margin: 5px;
+}
+
+.table .row .col input {
+    border: 0px;
+}
+
+.table .row:first-child .col {
+    border: 0px;
+}
+
+.table .row .col {
+    max-width: 100px;
+}
+
+.table .row .col:first-child {
+    max-width: 300px;
+}
+
+.table .row .col:last-child {
+    max-width: 100px;
+}
+
+@media (max-width: 576px) {
+    .table .row .col {
+        max-width: 85px;
+    }
+
+    .table .row .col:first-child {
+        max-width: 150px;
+    }
+
+    .table .row .col:last-child {
+        max-width: 80px;
+    }
+}
