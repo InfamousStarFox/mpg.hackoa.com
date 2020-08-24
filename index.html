@@ -203,32 +203,37 @@
 				});
 			},
 			distance: function () {
-				function setDistance(yearly_miles=0) {
+				function setDistance(yearly_miles=0, element) {
 					// Set the fields
-					document.getElementById("mi_weekly").value = parseFloat((Number)(yearly_miles / 52).toFixed(2));
-					document.getElementById("mi_yearly").value = parseFloat((Number)(yearly_miles).toFixed(2));
-					document.getElementById("km_weekly").value = parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2));
-					document.getElementById("km_yearly").value = parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2));
+					var mi_weekly = parseFloat((Number)(yearly_miles / 52).toFixed(2));
+					var mi_yearly = parseFloat((Number)(yearly_miles).toFixed(2));
+					var km_weekly = parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2));
+					var km_yearly = parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2));
+
+					if(element != "mi_weekly") document.getElementById("mi_weekly").value = mi_weekly;
+					if(element != "mi_yearly") document.getElementById("mi_yearly").value = mi_yearly;
+					if(element != "km_weekly") document.getElementById("km_weekly").value = km_weekly;
+					if(element != "km_yearly") document.getElementById("km_yearly").value = km_yearly;
 					
 					// Set the cookies
-					cookie.set("weekly_miles", document.getElementById("mi_weekly").value);
-					cookie.set("yearly_miles", document.getElementById("mi_yearly").value);
-					cookie.set("weekly_km", document.getElementById("km_weekly").value);
-					cookie.set("yearly_km", document.getElementById("km_yearly").value);
+					cookie.set("weekly_miles", mi_weekly);
+					cookie.set("yearly_miles", mi_yearly);
+					cookie.set("weekly_km", km_weekly);
+					cookie.set("yearly_km", km_yearly);
 
 					cost.calculate();
 				}
 				document.getElementById("mi_weekly").addEventListener("keyup", function(){
-					setDistance(this.value * 52);
+					setDistance(this.value * 52, "mi_weekly");
 				});
 				document.getElementById("mi_yearly").addEventListener("keyup", function(){
-					setDistance(this.value);
+					setDistance(this.value, "mi_yearly");
 				});
 				document.getElementById("km_weekly").addEventListener("keyup", function(){
-					setDistance(convert.km_to_miles(this.value) / 52);
+					setDistance(convert.km_to_miles(this.value) * 52, "km_weekly");
 				});
 				document.getElementById("km_yearly").addEventListener("keyup", function(){
-					setDistance(convert.km_to_miles(this.value));
+					setDistance(convert.km_to_miles(this.value), "km_yearly");
 				});
 			},
 			gas: function () {
