@@ -14,32 +14,32 @@
 			<div class="form-row">
 				<div class="form-col">
 					<label>Weekly Miles</label>
-					<input type="number" id="mi_weekly" name="mi_weekly" min="0" step=".01" placeholder="Miles">
+					<input type="number" id="weekly_miles" name="weekly_miles" min="0" step=".01" placeholder="Miles">
 				</div>
 				<div class="form-col">
 					<label>Annual Miles</label>
-					<input type="number" id="mi_yearly" name="mi_yearly" min="0" step=".01" placeholder="Miles">
+					<input type="number" id="yearly_miles" name="yearly_miles" min="0" step=".01" placeholder="Miles">
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="form-col">
 					<label>Weekly Kilometers</label>
-					<input type="number" id="km_weekly" name="km_weekly" min="0" step=".01" placeholder="KM">
+					<input type="number" id="weekly_km" name="weekly_km" min="0" step=".01" placeholder="KM">
 				</div>
 				<div class="form-col">
 					<label>Annual Kilometers</label>
-					<input type="number" id="km_yearly" name="km_yearly" min="0" step=".01" placeholder="KM">
+					<input type="number" id="yearly_km" name="yearly_km" min="0" step=".01" placeholder="KM">
 				</div>
 			</div>
 			<h3>Fuel Cost</h3>
 			<div class="form-row">
 				<div class="form-col">
 					<label>Gasoline</label>
-					<input type="number" id="gas" name="gas" min="0" max="1000" step=".001" placeholder="$ per gallon">
+					<input type="number" id="gas_price" name="gas_price" min="0" max="1000" step=".001" placeholder="$ per gallon">
 				</div>
 				<div class="form-col">
 					<label>Electricity</label>
-					<input type="number" id="elec" name="elec" min="0" max="1000" step=".001"
+					<input type="number" id="elec_price" name="elec_price" min="0" max="1000" step=".001"
 						placeholder="&cent; per kWh">
 				</div>
 			</div>
@@ -110,13 +110,12 @@
 	</div>
 
 	<script src="js/cookie.js"></script>
-	<script src="js/jquery.min.js"></script>
 	<script type="text/javascript">
 
 		// Global Variables
-		var gas_price = cookie.get("gas_price") ? cookie.get("gas_price") : 0;
-		var elec_price = cookie.get("elec_price") ? cookie.get("elec_price") : 0;
-		var yearly_miles = cookie.get("yearly_miles") ? cookie.get("yearly_miles") : 0;
+		var gas_price = cookie.get("gas_price") ?? 0;
+		var elec_price = cookie.get("elec_price") ?? 0;
+		var yearly_miles = cookie.get("yearly_miles") ?? 0;
 
 		// Convert units
 		var convert = {
@@ -126,157 +125,114 @@
 			km_to_miles: function (km) {
 				return (km / 1.60934).toFixed(2);
 			}
-		}
-
+		};
+		
 		// Calculate Yearly Costs
 		var cost = {
 			calculate: function () {
 				for (let i = 1; i <= 4; i++) {
-					cost.mpg(i);
+					cost.mpg("F" + i + "_mpg", i);
 					cost.mpge(i);
 				}
 			},
-			name: function (c, i) {
-				if (c == 'F') cookie.set("F" + i + "_name", document.getElementById("F" + i + "_name").value);
-				if (c == 'E') cookie.set("E" + i + "_name", document.getElementById("E" + i + "_name").value);
+			name: function (id) {
+				cookie.set(id, document.getElementById(id).value);
 			},
-			mpg: function (i) {
-				var mpg = document.getElementById("F" + i + "_mpg").value;
-				cookie.set("F" + i + "_mpg", mpg);
-
-				if (Number(mpg) > 0) {
-					var yearly_cost = gas_price * yearly_miles / mpg;
-					document.getElementById("F" + i + "_cost").value = "$" + (yearly_cost).toFixed(2);
-				}
-				else {
-					document.getElementById("F" + i + "_cost").value = "$0.00";
-				}
+			mpg: function (id, i) {
+				var mpg = document.getElementById(id).value;
+				cookie.set(id, mpg);
+				
+				document.getElementById("F" + i + "_cost").value = (Number(mpg) > 0)
+					? "$" + (gas_price * yearly_miles / mpg).toFixed(2)
+					: "$0.00";
 			},
 			mpge: function (i) {
 				var kwh = document.getElementById("E" + i + "_kwh").value;
 				var range = document.getElementById("E" + i + "_range").value;
 
-				if (Number(kwh) > 0 && Number(range) > 0) {
-					var yearly_cost = elec_price * .01 * yearly_miles / (range / kwh);
-					document.getElementById("E" + i + "_cost").value = "$" + (yearly_cost).toFixed(2);
-				}
-				else {
-					document.getElementById("E" + i + "_cost").value = "$0.00";
-				}
+				document.getElementById("E" + i + "_cost").value = (Number(kwh) > 0 && Number(range) > 0)
+					? "$" + (elec_price * .01 * yearly_miles / (range / kwh)).toFixed(2)
+					: "$0.00";
 			},
-			kwh: function (i) {
-				cookie.set("E" + i + "_kwh", document.getElementById("E" + i + "_kwh").value);
+			kwh: function (id, i) {
+				cookie.set(id, document.getElementById(id).value);
 				cost.mpge(i);
 			},
-			range: function (i) {
-				cookie.set("E" + i + "_range", document.getElementById("E" + i + "_range").value);
+			range: function (id, i) {
+				cookie.set(id, document.getElementById(id).value);
 				cost.mpge(i);
 			},
-			gas_price: function () {
-				gas_price = document.getElementById("gas").value;
-				cookie.set("gas_price", gas_price);
+			gas_price: function (id) {
+				gas_price = document.getElementById(id).value;
+				cookie.set(id, gas_price);
 				cost.calculate();
 			},
-			elec_price: function () {
-				elec_price = document.getElementById("elec").value;
-				cookie.set("elec_price", elec_price);
+			elec_price: function (id) {
+				elec_price = document.getElementById(id).value;
+				cookie.set(id, elec_price);
 				cost.calculate();
 			},
-			distance: function (unit) {
-				var new_miles = 0;
-				if (unit == "mi_weekly") new_miles = document.getElementById("mi_weekly").value * 52;
-				if (unit == "mi_yearly") new_miles = document.getElementById("mi_yearly").value;
-				if (unit == "km_weekly") new_miles = convert.km_to_miles(document.getElementById("km_weekly").value) * 52;
-				if (unit == "km_yearly") new_miles = convert.km_to_miles(document.getElementById("km_yearly").value);
-
+			distance: function (id, scale, unit) {
 				// Update the global variable
-				yearly_miles = new_miles;
+				yearly_miles = (unit == "mi")
+					? document.getElementById(id).value * scale
+					: convert.km_to_miles(document.getElementById(id).value) * scale;
 
 				// Calculate the fields
-				var mi_weekly = parseFloat((Number)(yearly_miles / 52).toFixed(2));
-				var mi_yearly = parseFloat((Number)(yearly_miles).toFixed(2));
-				var km_weekly = parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2));
-				var km_yearly = parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2));
+				var fields = {
+					"weekly_miles": parseFloat((Number)(yearly_miles / 52).toFixed(2)),
+					"yearly_miles": parseFloat((Number)(yearly_miles).toFixed(2)),
+					"weekly_km": parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2)),
+					"yearly_km": parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2)),
+				};
 
-				// Set the fields
-				if (unit != "mi_weekly") document.getElementById("mi_weekly").value = mi_weekly;
-				if (unit != "mi_yearly") document.getElementById("mi_yearly").value = mi_yearly;
-				if (unit != "km_weekly") document.getElementById("km_weekly").value = km_weekly;
-				if (unit != "km_yearly") document.getElementById("km_yearly").value = km_yearly;
-
-				// Set the cookies
-				cookie.set("weekly_miles", mi_weekly);
-				cookie.set("yearly_miles", mi_yearly);
-				cookie.set("weekly_km", km_weekly);
-				cookie.set("yearly_km", km_yearly);
+				// Set the form fields
+				Object.keys(fields).forEach(function(key){
+					if (id != key) document.getElementById(key).value = fields[key];
+					cookie.set(id, fields[key]);
+				});
 
 				// Calculate the new yearly costs
 				cost.calculate();
 			}
 		};
 
+		let fields = {
+			"gas_price": function(){ cost.gas_price("gas_price") },
+			"elec_price": function(){ cost.elec_price("elec_price") },
+			"weekly_miles": function(){ cost.distance("weekly_miles", 52, "mi") },
+			"weekly_km": function(){ cost.distance("weekly_km", 52, "km") },
+			"yearly_miles": function(){ cost.distance("yearly_miles", 1, "mi") },
+			"yearly_km": function(){ cost.distance("yearly_km", 1, "km") },
+		};
+		for (let i = 1; i <= 4; i++) {
+			fields["F" + i + "_name"] = function(){ cost.name("F" + i + "_name") };
+			fields["E" + i + "_name"] = function(){ cost.name("E" + i + "_name") };
+			fields["F" + i + "_mpg"] = function(){ cost.mpg("F" + i + "_mpg", i) };
+			fields["E" + i + "_kwh"] = function(){ cost.kwh("E" + i + "_kwh", i) };
+			fields["E" + i + "_range"] = function(){ cost.range("E" + i + "_range", i) };
+		}
+
 		// Initialize the form
-		function init() {
+		function init(fields) {
 
 			// Load cookie data into the form
-			function loadCookieData() {
-				for (let i = 1; i <= 4; i++) {
-					document.getElementById("F" + i + "_name").value = cookie.get("F" + i + "_name");
-					document.getElementById("F" + i + "_mpg").value = cookie.get("F" + i + "_mpg");
-					document.getElementById("E" + i + "_name").value = cookie.get("E" + i + "_name");
-					document.getElementById("E" + i + "_kwh").value = cookie.get("E" + i + "_kwh");
-					document.getElementById("E" + i + "_range").value = cookie.get("E" + i + "_range");
-				}
-				document.getElementById("mi_weekly").value = cookie.get("weekly_miles");
-				document.getElementById("km_weekly").value = cookie.get("weekly_km");
-				document.getElementById("mi_yearly").value = cookie.get("yearly_miles");
-				document.getElementById("km_yearly").value = cookie.get("yearly_km");
-				document.getElementById("gas").value = cookie.get("gas_price");
-				document.getElementById("elec").value = cookie.get("elec_price");
-			}
-			loadCookieData();
+			Object.keys(fields).forEach(function(key){
+				document.getElementById(key).value = cookie.get(key);
+			});
 
-			// Calculate the yearly costs
+			// Calculate the costs
 			cost.calculate();
 
 			// Watch for changes
-			function watchChanges() {
-				document.getElementById("gas").addEventListener("keyup", function () {
-					cost.gas_price();
-				});
-				document.getElementById("elec").addEventListener("keyup", function () {
-					cost.elec_price();
-				});
-				["mi_weekly", "mi_yearly", "km_weekly", "km_yearly"]
-					.forEach(i => {
-						document.getElementById(i).addEventListener("keyup", function () {
-							cost.distance(i);
-						});
-					});
-				for (let i = 1; i <= 4; i++) {
-					document.getElementById("F"+i+"_name").addEventListener("keyup", function () {
-						cost.name('F', i);
-					});
-					document.getElementById("F"+i+"_mpg").addEventListener("keyup", function () {
-						cost.mpg(i);
-					});
-					document.getElementById("E"+i+"_name").addEventListener("keyup", function () {
-						cost.name('E', i);
-					});
-					document.getElementById("E"+i+"_kwh").addEventListener("keyup", function () {
-						cost.kwh(i);
-					});
-					document.getElementById("E"+i+"_range").addEventListener("keyup", function () {
-						cost.range(i);
-					});
-				}
-			}
-			watchChanges();
-
+			Object.keys(fields).forEach(function(key){
+				document.getElementById(key).addEventListener("keyup", function () {
+					fields[key]();
+				});	
+			});
 		}
-		init();
+		init(fields);
 	</script>
 
 </body>
-
 </html>
