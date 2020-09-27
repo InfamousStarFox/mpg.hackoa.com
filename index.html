@@ -124,15 +124,16 @@
 				}
 			},
 			gas_price: function () {
-				gas_price = document.getElementById("gas_price");
+				gas_price = document.getElementById("gas_price").value;
 				cost.calculate();
 			},
 			elec_price: function () {
-				elec_price = document.getElementById("elec_price");
+				elec_price = document.getElementById("elec_price").value;
 				cost.calculate();
 			},
 			mpg: function (i) {
 				var mpg = document.getElementById("F" + i + "_mpg").value;
+				console.log("gas_price: "+gas_price+" yearly_miles: "+yearly_miles+" mpg: "+mpg);
 				document.getElementById("F" + i + "_cost").value = (Number(mpg) > 0)
 					? "$" + (gas_price * yearly_miles / mpg).toFixed(2)
 					: "$0.00";
