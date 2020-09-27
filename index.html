@@ -109,39 +109,30 @@
 		</div>
 	</div>
 
-	<script src="js/cookie.js"></script>
 	<script type="text/javascript">
-
-		// Global Variables
-		var gas_price = cookie.get("gas_price") ?? 0;
-		var elec_price = cookie.get("elec_price") ?? 0;
-		var yearly_miles = cookie.get("yearly_miles") ?? 0;
-
-		// Convert units
-		var convert = {
-			miles_to_km: function (miles) {
-				return (miles * 1.60934).toFixed(2);
-			},
-			km_to_miles: function (km) {
-				return (km / 1.60934).toFixed(2);
-			}
-		};
 		
-		// Calculate Yearly Costs
+		// Global Variables
+		var gas_price = localStorage.getItem("gas_price") ?? 0;
+		var elec_price = localStorage.getItem("elec_price") ?? 0;
+		var yearly_miles = localStorage.getItem("yearly_miles") ?? 0;
+
 		var cost = {
 			calculate: function () {
 				for (let i = 1; i <= 4; i++) {
-					cost.mpg("F" + i + "_mpg", i);
+					cost.mpg(i);
 					cost.mpge(i);
 				}
 			},
-			name: function (id) {
-				cookie.set(id, document.getElementById(id).value);
+			gas_price: function () {
+				gas_price = document.getElementById("gas_price");
+				cost.calculate();
 			},
-			mpg: function (id, i) {
-				var mpg = document.getElementById(id).value;
-				cookie.set(id, mpg);
-				
+			elec_price: function () {
+				elec_price = document.getElementById("elec_price");
+				cost.calculate();
+			},
+			mpg: function (i) {
+				var mpg = document.getElementById("F" + i + "_mpg").value;
 				document.getElementById("F" + i + "_cost").value = (Number(mpg) > 0)
 					? "$" + (gas_price * yearly_miles / mpg).toFixed(2)
 					: "$0.00";
@@ -149,89 +140,78 @@
 			mpge: function (i) {
 				var kwh = document.getElementById("E" + i + "_kwh").value;
 				var range = document.getElementById("E" + i + "_range").value;
-
 				document.getElementById("E" + i + "_cost").value = (Number(kwh) > 0 && Number(range) > 0)
 					? "$" + (elec_price * .01 * yearly_miles / (range / kwh)).toFixed(2)
 					: "$0.00";
 			},
-			kwh: function (id, i) {
-				cookie.set(id, document.getElementById(id).value);
-				cost.mpge(i);
-			},
-			range: function (id, i) {
-				cookie.set(id, document.getElementById(id).value);
-				cost.mpge(i);
-			},
-			gas_price: function (id) {
-				gas_price = document.getElementById(id).value;
-				cookie.set(id, gas_price);
-				cost.calculate();
-			},
-			elec_price: function (id) {
-				elec_price = document.getElementById(id).value;
-				cookie.set(id, elec_price);
-				cost.calculate();
-			},
 			distance: function (id, scale, unit) {
-				// Update the global variable
+				
+				// Update global variable
 				yearly_miles = (unit == "mi")
 					? document.getElementById(id).value * scale
-					: convert.km_to_miles(document.getElementById(id).value) * scale;
+					: document.getElementById(id).value * scale * 0.62137;
 
-				// Calculate the fields
+				var yearly_km = (unit == "km")
+					? document.getElementById(id).value * scale
+					: document.getElementById(id).value * scale * 1.60934;
+
+				// Calculate the form fields
 				var fields = {
 					"weekly_miles": parseFloat((Number)(yearly_miles / 52).toFixed(2)),
 					"yearly_miles": parseFloat((Number)(yearly_miles).toFixed(2)),
-					"weekly_km": parseFloat((Number)(convert.miles_to_km(yearly_miles) / 52).toFixed(2)),
-					"yearly_km": parseFloat((Number)(convert.miles_to_km(yearly_miles)).toFixed(2)),
+					"weekly_km": parseFloat((Number)(yearly_km / 52).toFixed(2)),
+					"yearly_km": parseFloat((Number)(yearly_km).toFixed(2)),
 				};
 
 				// Set the form fields
 				Object.keys(fields).forEach(function(key){
-					if (id != key) document.getElementById(key).value = fields[key];
-					cookie.set(id, fields[key]);
+					if (id != key){
+						document.getElementById(key).value = fields[key];
+						localStorage.setItem(key, fields[key]);
+					}
 				});
 
-				// Calculate the new yearly costs
+				// Calculate each vehicles new yearly costs
 				cost.calculate();
 			}
 		};
 
-		let fields = {
-			"gas_price": function(){ cost.gas_price("gas_price") },
-			"elec_price": function(){ cost.elec_price("elec_price") },
-			"weekly_miles": function(){ cost.distance("weekly_miles", 52, "mi") },
-			"weekly_km": function(){ cost.distance("weekly_km", 52, "km") },
-			"yearly_miles": function(){ cost.distance("yearly_miles", 1, "mi") },
-			"yearly_km": function(){ cost.distance("yearly_km", 1, "km") },
-		};
-		for (let i = 1; i <= 4; i++) {
-			fields["F" + i + "_name"] = function(){ cost.name("F" + i + "_name") };
-			fields["E" + i + "_name"] = function(){ cost.name("E" + i + "_name") };
-			fields["F" + i + "_mpg"] = function(){ cost.mpg("F" + i + "_mpg", i) };
-			fields["E" + i + "_kwh"] = function(){ cost.kwh("E" + i + "_kwh", i) };
-			fields["E" + i + "_range"] = function(){ cost.range("E" + i + "_range", i) };
-		}
+		// Initialize the form fields
+		function init() {
+			let fields = {
+				"gas_price": function(){ cost.gas_price(); },
+				"elec_price": function(){ cost.elec_price(); },
+				"weekly_miles": function(){ cost.distance("weekly_miles", 52, "mi"); },
+				"weekly_km": function(){ cost.distance("weekly_km", 52, "km"); },
+				"yearly_miles": function(){ cost.distance("yearly_miles", 1, "mi"); },
+				"yearly_km": function(){ cost.distance("yearly_km", 1, "km"); },
+			};
+			for (let i = 1; i <= 4; i++) {
+				fields["F" + i + "_name"] = function(){};
+				fields["E" + i + "_name"] = function(){};
+				fields["F" + i + "_mpg"] = function(){ cost.mpg(i); };
+				fields["E" + i + "_kwh"] = function(){ cost.mpge(i); };
+				fields["E" + i + "_range"] = function(){ cost.mpge(i); };
+			}
 
-		// Initialize the form
-		function init(fields) {
-
-			// Load cookie data into the form
+			// Load data into each field
 			Object.keys(fields).forEach(function(key){
-				document.getElementById(key).value = cookie.get(key);
+				document.getElementById(key).value = localStorage.getItem(key);
 			});
 
 			// Calculate the costs
 			cost.calculate();
 
-			// Watch for changes
+			// Watch for form changes
 			Object.keys(fields).forEach(function(key){
 				document.getElementById(key).addEventListener("keyup", function () {
+					localStorage.setItem(key, document.getElementById(key).value);
 					fields[key]();
 				});	
 			});
 		}
-		init(fields);
+		init();
+
 	</script>
 
 </body>
