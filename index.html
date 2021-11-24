@@ -100,26 +100,14 @@
 				}
 			},
 			fields: {
-				gasoline: [
-					{ name: '', mpg: null },
-					{ name: '', mpg: null },
-					{ name: '', mpg: null }
-				],
-				electric: [
-					{ name: '', kwh: null, range: null },
-					{ name: '', kwh: null, range: null },
-					{ name: '', kwh: null, range: null }
-				]
+				gasoline: {},
+				electric: {}
 			},
 			...storedData
 		};
 
-		for(let i=0; i < data.fields.gasoline.length; i++) {
-			addRowGas(i);
-		}
-
 		function addRowGas(index) {
-			const i = index ?? data.fields.gasoline.length;
+			const i = index ?? (Date.now() + Math.random() * 100).toFixed(0);
 			if (!data.fields.gasoline[i]) {
 				data.fields.gasoline[i] = { name: '', mpg: null };
 			}
@@ -127,42 +115,29 @@
 			newRow.className = "row";
 			newRow.id = "gasTableRow_" + i;
 			newRow.innerHTML = `
-				<button class="col" onClick="removeRowGas(${i})">X</button>
-				<div class="col"><input type="text" id="${'F'+i+'_name'}" placeholder="Year Make Model" value='${data.fields.gasoline[i]?.name ?? ''}'></div>
-				<div class="col"><input type="number" id="${'F'+i+'_mpg'}" min="0" step=".01" placeholder="gallons" value='${data.fields.gasoline[i]?.mpg ?? ''}'></div>
-				<div class="col"><input type="text" id="${'F'+i+'_cost'}" disabled placeholder="$0.00"></div>
+				<button class="col" onClick="removeRowGas('${i}')">X</button>
+				<div class="col"><input type="text" id="${'F'+i+'_name'}" class="_name" placeholder="Year Make Model" value='${data.fields.gasoline[i]?.name ?? ''}'></div>
+				<div class="col"><input type="number" id="${'F'+i+'_mpg'}" class="_mpg" min="0" step=".01" placeholder="gallons" value='${data.fields.gasoline[i]?.mpg ?? ''}'></div>
+				<div class="col"><input type="text" id="${'F'+i+'_cost'}" class="_cost" disabled placeholder="$0.00"></div>
 			`;
 			document.getElementById('gasTable').appendChild(newRow);
 
-			let fields = [];
-			fields["F" + i + "_name"] = () => {
-				data.fields.gasoline[i].name = document.getElementById("F" + i + "_name").value;
-			};
-			fields["F" + i + "_mpg"] = () => {
-				data.fields.gasoline[i].mpg = document.getElementById("F" + i + "_mpg").value;
+			newRow.addEventListener("keyup", () => {
+				data.fields.gasoline[i].name = newRow.getElementsByClassName("_name")[0].value;
+				data.fields.gasoline[i].mpg = newRow.getElementsByClassName("_mpg")[0].value;
 				cost.mpg(i);
-			};
-
-			Object.keys(fields).forEach(function(key){
-				document.getElementById(key).addEventListener("keyup", function () {
-					fields[key]();
-					localStorage.setItem('data', JSON.stringify(data));
-				});
+				localStorage.setItem('data', JSON.stringify(data));
 			});
 		}
 
-		function removeRowGas(index) {
-			data.fields.gasoline.splice(index, 1);
-			document.getElementById("gasTableRow_" + index).remove();
+		function removeRowGas(i) {
+			document.getElementById("gasTableRow_" + i).remove();
+			delete data.fields.gasoline[i];
 			localStorage.setItem('data', JSON.stringify(data));
 		}
 
-		for(let i=0; i < data.fields.electric.length; i++) {
-			addRowElec(i);
-		}
-
 		function addRowElec(index) {
-			const i = index ?? data.fields.electric.length;
+			const i = index ?? (Date.now() + Math.random() * 100).toFixed(0);
 			if (!data.fields.electric[i]) {
 				data.fields.electric[i] = { name: '', kwh: null, range: null };
 			}
@@ -171,48 +146,36 @@
 			newRow.id = "elecTableRow_" + i;
 			newRow.innerHTML=`
 				<button class="col" onClick="removeRowElec(${i})">X</button>
-				<div class="col"><input type="text" id="${'E'+i+'_name'}" placeholder="Year Make Model" value='${data.fields.electric[i]?.name ?? ''}'></div>
-				<div class="col"><input type="number" id="${'E'+i+'_kwh'}" min="0" step=".01" placeholder="kWh" value='${data.fields.electric[i]?.kwh ?? ''}'></div>
-				<div class="col"><input type="number"min id="${'E'+i+'_range'}"="0" step=".01" placeholder="miles" value='${data.fields.electric[i]?.range ?? ''}'></div>
-				<div class="col"><input type="text" id="${'E'+i+'_cost'}" disabled placeholder="$0.00"></div>
+				<div class="col"><input type="text" id="${'E'+i+'_name'}" class="_name" placeholder="Year Make Model" value='${data.fields.electric[i]?.name ?? ''}'></div>
+				<div class="col"><input type="number" id="${'E'+i+'_kwh'}" class="_kwh" min="0" step=".01" placeholder="kWh" value='${data.fields.electric[i]?.kwh ?? ''}'></div>
+				<div class="col"><input type="number"id="${'E'+i+'_range'}" class="_range" min="0" step=".01" placeholder="miles" value='${data.fields.electric[i]?.range ?? ''}'></div>
+				<div class="col"><input type="text" id="${'E'+i+'_cost'}" class="_cost" disabled placeholder="$0.00"></div>
 			`;
 			document.getElementById('electricTable').appendChild(newRow);
 
-			let fields = [];
-			fields["E" + i + "_name"] = () => {
-				data.fields.electric[i].name = document.getElementById("F" + i + "_name").value;
-			};
-			fields["E" + i + "_kwh"] = () => {
-				data.fields.electric[i].kwh = document.getElementById("F" + i + "_kwh").value;
+			newRow.addEventListener("keyup", function () {
+				data.fields.electric[i].name = newRow.getElementsByClassName("_name")[0].value;
+				data.fields.electric[i].kwh = newRow.getElementsByClassName("_kwh")[0].value;
+				data.fields.electric[i].range = newRow.getElementsByClassName("_range")[0].value;
 				cost.mpge(i);
-			};
-			fields["E" + i + "_range"] = () => {
-				data.fields.electric[i].range = document.getElementById("F" + i + "_range").value;
-				cost.mpge(i);
-			};
-
-			Object.keys(fields).forEach(function(key){
-				document.getElementById(key).addEventListener("keyup", function () {
-					fields[key]();
-					localStorage.setItem('data', JSON.stringify(data));
-				});
+				localStorage.setItem('data', JSON.stringify(data));
 			});
 		}
 
-		function removeRowElec(index) {
-			data.fields.electric.splice(index, 1);
-			document.getElementById("elecTableRow_" + index).remove();
+		function removeRowElec(i) {
+			document.getElementById("elecTableRow_" + i).remove();
+			delete data.fields.electric[i];
 			localStorage.setItem('data', JSON.stringify(data));
 		}
 		
 		var cost = {
 			calculate: () => {
-				for(let i=0; i < data.fields.gasoline.length; i++) {
-					cost.mpg(i);
-				}
-				for(let i=0; i < data.fields.electric.length; i++) {
-					cost.mpge(i);
-				}
+				Object.keys(data.fields.gasoline).forEach((key) => {
+					cost.mpg(key);
+				});
+				Object.keys(data.fields.electric).forEach((key) => {
+					cost.mpge(key);
+				});
 			},
 			mpg: (i) => {
 				var mpg = data.fields.gasoline[i].mpg;
@@ -267,14 +230,13 @@
 			document.getElementById("weekly_km").value = data.distance.km.weekly;
 			document.getElementById("yearly_miles").value = data.distance.mi.yearly;
 			document.getElementById("yearly_km").value = data.distance.km.yearly;
-			for(let i=0; i < data.fields.gasoline.length; i++) {
-				document.getElementById("F" + i + "_name").value = data.fields.gasoline[i].name;
-				document.getElementById("F" + i + "_mpg").value = data.fields.gasoline[i].mpg;
+			Object.keys(data.fields.gasoline).forEach((key) => addRowGas(key));
+			Object.keys(data.fields.electric).forEach((key) => addRowElec(key));
+			for (let i=Object.keys(data.fields.gasoline).length; i<3; i++) {
+				addRowGas();
 			}
-			for(let i=0; i < data.fields.electric.length; i++) {
-				document.getElementById("E" + i + "_name").value = data.fields.electric[i].name;
-				document.getElementById("E" + i + "_kwh").value = data.fields.electric[i].kwh;
-				document.getElementById("E" + i + "_range").value = data.fields.electric[i].range;
+			for (let i=Object.keys(data.fields.electric).length; i<3; i++) {
+				addRowElec();
 			}
 			
 			// Calculate the costs
@@ -307,30 +269,6 @@
 					cost.distance("yearly_km", 1, "km");
 				},
 			};
-
-			for(let i=0; i < data.fields.gasoline.length; i++) {
-				fields["F" + i + "_name"] = () => {
-					data.fields.gasoline[i].name = document.getElementById("F" + i + "_name").value;
-				};
-				fields["F" + i + "_mpg"] = () => {
-					data.fields.gasoline[i].mpg = document.getElementById("F" + i + "_mpg").value;
-					cost.mpg(i);
-				};
-			}
-
-			for(let i=0; i < data.fields.electric.length; i++) {
-				fields["E" + i + "_name"] = () => {
-					data.fields.electric[i].name = document.getElementById("E" + i + "_name").value;
-				};
-				fields["E" + i + "_kwh"] = () => {
-					data.fields.electric[i].kwh = document.getElementById("E" + i + "_kwh").value;
-					cost.mpge(i);
-				};
-				fields["E" + i + "_range"] = () => {
-					data.fields.electric[i].range = document.getElementById("E" + i + "_range").value;
-					cost.mpge(i);
-				};
-			}
 
 			Object.keys(fields).forEach(function(key){
 				document.getElementById(key).addEventListener("keyup", function () {
