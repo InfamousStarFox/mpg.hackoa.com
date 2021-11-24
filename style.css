@@ -20,11 +20,10 @@ h1,h2,h3,h4 {
     border: 1px solid rgba(0, 0, 0, .125);
 }
 
-@media (max-width: 576px) {
+@media (max-width: 750px) {
     body {
         margin: 0px;
     }
-
     .container {
         padding: 5px 15px 15px 15px;
     }
@@ -43,8 +42,8 @@ h1,h2,h3,h4 {
 }
 
 .col {
-    flex-basis: 0;
-    flex-grow: 1;
+    flex-basis: 1;
+    flex-grow: 0;
     max-width: 100%;
 }
 
@@ -63,13 +62,22 @@ input {
     max-width: 100%;
 }
 
+input[type="radio"] {
+    display: inline;
+    width: auto;
+}
+
+input[type="radio"] + label {
+    margin-bottom: 0px;
+}
+
 input:focus,
 .table .row .col input:focus {
     border: 1px solid purple;
     outline: none;
 }
 
-input,
+input, button,
 .table .row .col {
     color: #495057;
     border: 1px solid #ced4da;
@@ -77,8 +85,23 @@ input,
     display: block;
 }
 
+button {
+    padding: 5px;
+    width: 100%;
+    margin: 5px;
+}
+
 .table .row .col {
     margin: 5px;
+    max-width: 100px;
+    width: 100px;
+}
+.table .row .col:nth-child(1) {
+    width: 30px;
+}
+.table .row .col:nth-child(2) {
+    flex-grow: 1;
+    width: 25px;
 }
 
 .table .row .col input {
@@ -87,30 +110,32 @@ input,
 
 .table .row:first-child .col {
     border: 0px;
+    font-weight: bold;
 }
 
-.table .row .col {
-    max-width: 100px;
+.table .row .col:nth-child(2) {
+    max-width: 100%;
 }
 
-.table .row .col:first-child {
-    max-width: 300px;
-}
-
-.table .row .col:last-child {
-    max-width: 100px;
-}
-
-@media (max-width: 576px) {
-    .table .row .col {
-        max-width: 85px;
+@media (max-width: 475px) {
+    #electricTable .row .col:nth-child(2) {
+        display: none;
     }
 
-    .table .row .col:first-child {
-        max-width: 150px;
+    #electricTable .row .col:not(:first-child) {
+        max-width: 100%;
+        flex-grow: 1;
+        width: 25px;
     }
+}
 
-    .table .row .col:last-child {
-        max-width: 80px;
+@media (max-width: 410px) {
+    #gasTable .row .col:nth-child(2) {
+        display: none;
+    }
+    #gasTable .row .col:not(:first-child) {
+        max-width: 100%;
+        flex-grow: 1;
+        width: 25px;
     }
 }

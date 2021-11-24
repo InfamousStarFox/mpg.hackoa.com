@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
-<title>MPG Calculator</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
+<html lang="en-US">
+
+<head>
+	<title>MPG Calculator</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
+</head>
 
 <body>
 	<div class="container">
-
 		<h1>Annual Fuel Cost Calculator</h1>
 		<div class="form-group">
 			<h3>Distance</h3>
@@ -35,140 +37,218 @@
 			<div class="form-row">
 				<div class="form-col">
 					<label>Gasoline</label>
-					<input type="number" id="gas_price" name="gas_price" min="0" max="1000" step=".001" placeholder="$ per gallon">
+					<input type="number" id="gas_price" name="gas_price" min="0" max="100" step=".01" placeholder="$ per gallon">
 				</div>
 				<div class="form-col">
 					<label>Electricity</label>
-					<input type="number" id="elec_price" name="elec_price" min="0" max="1000" step=".001"
-						placeholder="&cent; per kWh">
+					<input type="number" id="elec_price" name="elec_price" min="0" max="100" step=".01" placeholder="&cent; per kWh">
 				</div>
 			</div>
 		</div>
 
 		<h1>Gasoline Vehicle</h1>
-		<div class="form-group table">
+		<div id="gasTable" class="form-group table">
 			<div class="row">
+				<div class="col"></div>
 				<div class="col">Name</div>
 				<div class="col">MPG</div>
 				<div class="col">Yearly Cost</div>
 			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="F1_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="F1_mpg" min="0" step=".01" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F1_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text " id="F2_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="F2_mpg" min="0" step=".01" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F2_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="F3_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="F3_mpg" min="0" step=".01" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F3_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="F4_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="F4_mpg" min="0" step=".01" placeholder="gallons"></div>
-				<div class="col"><input type="text" id="F4_cost" disabled placeholder="$0.00"></div>
-			</div>
 		</div>
+		<button onClick="addRowGas()">Add Row</button>
 
 		<h1>Electric Vehicle</h1>
-		<div class="form-group table">
+		<div id="electricTable" class="form-group table">
 			<div class="row">
+				<div class="col"></div>
 				<div class="col">Name</div>
 				<div class="col">Battery Size</div>
 				<div class="col">Range</div>
 				<div class="col">Yearly Cost</div>
 			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="E1_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="E1_kwh" min="0" step=".01" placeholder="kWh"></div>
-				<div class="col"><input type="number" id="E1_range" min="0" step=".01" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E1_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="E2_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="E2_kwh" min="0" step=".01" placeholder="kWh"></div>
-				<div class="col"><input type="number" id="E2_range" min="0" step=".01" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E2_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="E3_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="E3_kwh" min="0" step=".01" placeholder="kWh"></div>
-				<div class="col"><input type="number" id="E3_range" min="0" step=".01" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E3_cost" disabled placeholder="$0.00"></div>
-			</div>
-			<div class="row">
-				<div class="col"><input type="text" id="E4_name" placeholder="Year Make Model"></div>
-				<div class="col"><input type="number" id="E4_kwh" min="0" step=".01" placeholder="kWh"></div>
-				<div class="col"><input type="number" id="E4_range" min="0" step=".01" placeholder="miles"></div>
-				<div class="col"><input type="text" id="E4_cost" disabled placeholder="$0.00"></div>
-			</div>
 		</div>
+		<button onClick="addRowElec()">Add Row</button>
 	</div>
 
 	<script type="text/javascript">
-		
-		// Global Variables
-		var gas_price = localStorage.getItem("gas_price") ?? 0;
-		var elec_price = localStorage.getItem("elec_price") ?? 0;
-		var yearly_miles = localStorage.getItem("yearly_miles") ?? 0;
 
+		const weeks_per_year = 52.1785; // Assuming 365.25 days per year, 7 days per week, gives 52.1785 weeks per year
+
+		const getData = (function() {
+			try {
+				return JSON.parse(localStorage.getItem('data'));
+			} catch (err) {
+				return null;
+			}
+		});
+
+		const storedData = JSON.parse(localStorage.getItem('data'));
+
+		const data = {
+			prices: {
+				gas: null,
+				electric: null
+			},
+			distance: {
+				mi: {
+					weekly: null,
+					yearly: null
+				},
+				km: {
+					weekly: null,
+					yearly: null
+				}
+			},
+			fields: {
+				gasoline: [
+					{ name: '', mpg: null },
+					{ name: '', mpg: null },
+					{ name: '', mpg: null }
+				],
+				electric: [
+					{ name: '', kwh: null, range: null },
+					{ name: '', kwh: null, range: null },
+					{ name: '', kwh: null, range: null }
+				]
+			},
+			...storedData
+		};
+
+		for(let i=0; i < data.fields.gasoline.length; i++) {
+			addRowGas(i);
+		}
+
+		function addRowGas(index) {
+			const i = index ?? data.fields.gasoline.length;
+			if (!data.fields.gasoline[i]) {
+				data.fields.gasoline[i] = { name: '', mpg: null };
+			}
+			const newRow = document.createElement("div");
+			newRow.className = "row";
+			newRow.id = "gasTableRow_" + i;
+			newRow.innerHTML = `
+				<button class="col" onClick="removeRowGas(${i})">X</button>
+				<div class="col"><input type="text" id="${'F'+i+'_name'}" placeholder="Year Make Model" value='${data.fields.gasoline[i]?.name ?? ''}'></div>
+				<div class="col"><input type="number" id="${'F'+i+'_mpg'}" min="0" step=".01" placeholder="gallons" value='${data.fields.gasoline[i]?.mpg ?? ''}'></div>
+				<div class="col"><input type="text" id="${'F'+i+'_cost'}" disabled placeholder="$0.00"></div>
+			`;
+			document.getElementById('gasTable').appendChild(newRow);
+
+			let fields = [];
+			fields["F" + i + "_name"] = () => {
+				data.fields.gasoline[i].name = document.getElementById("F" + i + "_name").value;
+			};
+			fields["F" + i + "_mpg"] = () => {
+				data.fields.gasoline[i].mpg = document.getElementById("F" + i + "_mpg").value;
+				cost.mpg(i);
+			};
+
+			Object.keys(fields).forEach(function(key){
+				document.getElementById(key).addEventListener("keyup", function () {
+					fields[key]();
+					localStorage.setItem('data', JSON.stringify(data));
+				});
+			});
+		}
+
+		function removeRowGas(index) {
+			data.fields.gasoline.splice(index, 1);
+			document.getElementById("gasTableRow_" + index).remove();
+			localStorage.setItem('data', JSON.stringify(data));
+		}
+
+		for(let i=0; i < data.fields.electric.length; i++) {
+			addRowElec(i);
+		}
+
+		function addRowElec(index) {
+			const i = index ?? data.fields.electric.length;
+			if (!data.fields.electric[i]) {
+				data.fields.electric[i] = { name: '', kwh: null, range: null };
+			}
+			const newRow = document.createElement("div");
+			newRow.className="row";
+			newRow.id = "elecTableRow_" + i;
+			newRow.innerHTML=`
+				<button class="col" onClick="removeRowElec(${i})">X</button>
+				<div class="col"><input type="text" id="${'E'+i+'_name'}" placeholder="Year Make Model" value='${data.fields.electric[i]?.name ?? ''}'></div>
+				<div class="col"><input type="number" id="${'E'+i+'_kwh'}" min="0" step=".01" placeholder="kWh" value='${data.fields.electric[i]?.kwh ?? ''}'></div>
+				<div class="col"><input type="number"min id="${'E'+i+'_range'}"="0" step=".01" placeholder="miles" value='${data.fields.electric[i]?.range ?? ''}'></div>
+				<div class="col"><input type="text" id="${'E'+i+'_cost'}" disabled placeholder="$0.00"></div>
+			`;
+			document.getElementById('electricTable').appendChild(newRow);
+
+			let fields = [];
+			fields["E" + i + "_name"] = () => {
+				data.fields.electric[i].name = document.getElementById("F" + i + "_name").value;
+			};
+			fields["E" + i + "_kwh"] = () => {
+				data.fields.electric[i].kwh = document.getElementById("F" + i + "_kwh").value;
+				cost.mpge(i);
+			};
+			fields["E" + i + "_range"] = () => {
+				data.fields.electric[i].range = document.getElementById("F" + i + "_range").value;
+				cost.mpge(i);
+			};
+
+			Object.keys(fields).forEach(function(key){
+				document.getElementById(key).addEventListener("keyup", function () {
+					fields[key]();
+					localStorage.setItem('data', JSON.stringify(data));
+				});
+			});
+		}
+
+		function removeRowElec(index) {
+			data.fields.electric.splice(index, 1);
+			document.getElementById("elecTableRow_" + index).remove();
+			localStorage.setItem('data', JSON.stringify(data));
+		}
+		
 		var cost = {
-			calculate: function () {
-				for (let i = 1; i <= 4; i++) {
+			calculate: () => {
+				for(let i=0; i < data.fields.gasoline.length; i++) {
 					cost.mpg(i);
+				}
+				for(let i=0; i < data.fields.electric.length; i++) {
 					cost.mpge(i);
 				}
 			},
-			gas_price: function () {
-				gas_price = document.getElementById("gas_price").value;
-				cost.calculate();
-			},
-			elec_price: function () {
-				elec_price = document.getElementById("elec_price").value;
-				cost.calculate();
-			},
-			mpg: function (i) {
-				var mpg = document.getElementById("F" + i + "_mpg").value;
-				console.log("gas_price: "+gas_price+" yearly_miles: "+yearly_miles+" mpg: "+mpg);
+			mpg: (i) => {
+				var mpg = data.fields.gasoline[i].mpg;
 				document.getElementById("F" + i + "_cost").value = (Number(mpg) > 0)
-					? "$" + (gas_price * yearly_miles / mpg).toFixed(2)
+					? "$" + (data.prices.gas * data.distance.mi.yearly / mpg).toFixed(2)
 					: "$0.00";
 			},
-			mpge: function (i) {
-				var kwh = document.getElementById("E" + i + "_kwh").value;
-				var range = document.getElementById("E" + i + "_range").value;
+			mpge: (i) => {
+				var kwh = data.fields.electric[i].kwh;
+				var range = data.fields.electric[i].range;
 				document.getElementById("E" + i + "_cost").value = (Number(kwh) > 0 && Number(range) > 0)
-					? "$" + (elec_price * .01 * yearly_miles / (range / kwh)).toFixed(2)
+					? "$" + (data.prices.electric * .01 * data.distance.mi.yearly / (range / kwh)).toFixed(2)
 					: "$0.00";
 			},
-			distance: function (id, scale, unit) {
-				
+			distance: (id, scale, unit) => {
 				// Update global variable
-				yearly_miles = (unit == "mi")
+				data.distance.mi.yearly = ((unit == "mi")
 					? document.getElementById(id).value * scale
-					: document.getElementById(id).value * scale * 0.62137;
+					: document.getElementById(id).value * scale * 0.62137).toFixed(2);
+				data.distance.mi.weekly = parseFloat((Number)(data.distance.mi.yearly / weeks_per_year).toFixed(2));
 
-				var yearly_km = (unit == "km")
+				data.distance.km.yearly = ((unit == "km")
 					? document.getElementById(id).value * scale
-					: document.getElementById(id).value * scale * 1.60934;
-
-				// Calculate the form fields
-				var fields = {
-					"weekly_miles": parseFloat((Number)(yearly_miles / 52).toFixed(2)),
-					"yearly_miles": parseFloat((Number)(yearly_miles).toFixed(2)),
-					"weekly_km": parseFloat((Number)(yearly_km / 52).toFixed(2)),
-					"yearly_km": parseFloat((Number)(yearly_km).toFixed(2)),
-				};
+					: document.getElementById(id).value * scale * 1.60934).toFixed(2);
+				data.distance.km.weekly = parseFloat((Number)(data.distance.km.yearly / weeks_per_year).toFixed(2));
 
 				// Set the form fields
-				Object.keys(fields).forEach(function(key){
-					if (id != key){
-						document.getElementById(key).value = fields[key];
-						localStorage.setItem(key, fields[key]);
+				const fields = {
+					"weekly_miles": data.distance.mi.weekly,
+					"yearly_miles": data.distance.mi.yearly,
+					"weekly_km": data.distance.km.weekly,
+					"yearly_km": data.distance.km.yearly,
+				}
+				Object.entries(fields).forEach(([key, value]) => {
+					if (id != key) {
+						document.getElementById(key).value = value
 					}
 				});
 
@@ -179,40 +259,87 @@
 
 		// Initialize the form fields
 		function init() {
-			let fields = {
-				"gas_price": function(){ cost.gas_price(); },
-				"elec_price": function(){ cost.elec_price(); },
-				"weekly_miles": function(){ cost.distance("weekly_miles", 52, "mi"); },
-				"weekly_km": function(){ cost.distance("weekly_km", 52, "km"); },
-				"yearly_miles": function(){ cost.distance("yearly_miles", 1, "mi"); },
-				"yearly_km": function(){ cost.distance("yearly_km", 1, "km"); },
-			};
-			for (let i = 1; i <= 4; i++) {
-				fields["F" + i + "_name"] = function(){};
-				fields["E" + i + "_name"] = function(){};
-				fields["F" + i + "_mpg"] = function(){ cost.mpg(i); };
-				fields["E" + i + "_kwh"] = function(){ cost.mpge(i); };
-				fields["E" + i + "_range"] = function(){ cost.mpge(i); };
-			}
 
 			// Load data into each field
-			Object.keys(fields).forEach(function(key){
-				document.getElementById(key).value = localStorage.getItem(key);
-			});
-
+			document.getElementById("gas_price").value = data.prices.gas;
+			document.getElementById("elec_price").value = data.prices.electric;
+			document.getElementById("weekly_miles").value = data.distance.mi.weekly;
+			document.getElementById("weekly_km").value = data.distance.km.weekly;
+			document.getElementById("yearly_miles").value = data.distance.mi.yearly;
+			document.getElementById("yearly_km").value = data.distance.km.yearly;
+			for(let i=0; i < data.fields.gasoline.length; i++) {
+				document.getElementById("F" + i + "_name").value = data.fields.gasoline[i].name;
+				document.getElementById("F" + i + "_mpg").value = data.fields.gasoline[i].mpg;
+			}
+			for(let i=0; i < data.fields.electric.length; i++) {
+				document.getElementById("E" + i + "_name").value = data.fields.electric[i].name;
+				document.getElementById("E" + i + "_kwh").value = data.fields.electric[i].kwh;
+				document.getElementById("E" + i + "_range").value = data.fields.electric[i].range;
+			}
+			
 			// Calculate the costs
 			cost.calculate();
 
 			// Watch for form changes
+			let fields = {
+				gas_price: () => {
+					data.prices.gas = document.getElementById("gas_price").value;
+					cost.calculate();
+				},
+				elec_price: () => {
+					data.prices.electric = document.getElementById("elec_price").value;
+					cost.calculate();
+				},
+				weekly_miles: () => {
+					data.distance.mi.weekly = document.getElementById("weekly_miles").value;
+					cost.distance("weekly_miles", weeks_per_year, "mi");
+				},
+				weekly_km: () => {
+					data.distance.km.weekly = document.getElementById("weekly_km").value;
+					cost.distance("weekly_km", weeks_per_year, "km");
+				},
+				yearly_miles: () => {
+					data.distance.mi.yearly = document.getElementById("yearly_miles").value;
+					cost.distance("yearly_miles", 1, "mi");
+				},
+				yearly_km: () => {
+					data.distance.km.yearly = document.getElementById("yearly_km").value;
+					cost.distance("yearly_km", 1, "km");
+				},
+			};
+
+			for(let i=0; i < data.fields.gasoline.length; i++) {
+				fields["F" + i + "_name"] = () => {
+					data.fields.gasoline[i].name = document.getElementById("F" + i + "_name").value;
+				};
+				fields["F" + i + "_mpg"] = () => {
+					data.fields.gasoline[i].mpg = document.getElementById("F" + i + "_mpg").value;
+					cost.mpg(i);
+				};
+			}
+
+			for(let i=0; i < data.fields.electric.length; i++) {
+				fields["E" + i + "_name"] = () => {
+					data.fields.electric[i].name = document.getElementById("E" + i + "_name").value;
+				};
+				fields["E" + i + "_kwh"] = () => {
+					data.fields.electric[i].kwh = document.getElementById("E" + i + "_kwh").value;
+					cost.mpge(i);
+				};
+				fields["E" + i + "_range"] = () => {
+					data.fields.electric[i].range = document.getElementById("E" + i + "_range").value;
+					cost.mpge(i);
+				};
+			}
+
 			Object.keys(fields).forEach(function(key){
 				document.getElementById(key).addEventListener("keyup", function () {
-					localStorage.setItem(key, document.getElementById(key).value);
 					fields[key]();
+					localStorage.setItem('data', JSON.stringify(data));
 				});	
 			});
 		}
 		init();
-
 	</script>
 
 </body>
